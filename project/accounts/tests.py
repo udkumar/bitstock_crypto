@@ -44,4 +44,7 @@ class DepositTestCase(TestCase):
         self.assertEquals(Transaction.objects.count(), 3)
         # Check balance is now 0.1
         account = Account.objects.get(user=self.user)
-        self.assertEquals(account.balance, 0.3)
+
+        # Convert satoshis to btc
+        balance = satoshis_to_btc(account.balance)
+        self.assertEquals(balance, 0.3)
