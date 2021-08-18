@@ -48,3 +48,30 @@ class DepositTestCase(TestCase):
         # Convert satoshis to btc
         balance = satoshis_to_btc(account.balance)
         self.assertEquals(balance, 0.3)
+    
+    def test_perform_withdrawal(self):
+        # Get the account and check 0 balance
+        account = Account.objects.get(user=self.user)
+        self.assertEquals(account.balance, 0)
+        # Check 0 transactions in database
+        self.assertEquals(Transaction.objects.count(), 0)
+
+        # deposit 0.1 bitcoin, 3 times
+        perform_deposit(self.user, 0.1)
+        perform_deposit(self.user, 0.1)
+        perform_deposit(self.user, 0.1)
+
+        # Check for 1 transaction in database
+        self.assertEquals(Transaction.objects.count(), 3)
+        # Check balance is now 0.3
+        account = Account.objects.get(user=self.user)
+        
+        # withdrawal 0.1 bitcoin
+        perform_withdrawal(self.user, 0.1)
+
+         # Check balance is now 0.2
+        account = Account.objects.get(user=self.user)
+
+        # Convert satoshis to btc
+        balance = satoshis_to_btc(account.balance)
+        self.assertEquals(balance, 0.2)
