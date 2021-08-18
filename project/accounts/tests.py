@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 from .models import Account, Transaction
 from .services import perform_deposit
+from .services import perform_deposit, perform_withdrawal, satoshis_to_btc
 
 
 class DepositTestCase(TestCase):
@@ -24,6 +25,7 @@ class DepositTestCase(TestCase):
         self.assertEquals(Transaction.objects.count(), 1)
         # Check balance is now 0.1
         account = Account.objects.get(user=self.user)
+        balance = satoshis_to_btc(account.balance)
         self.assertEquals(account.balance, 0.1)
 
     def test_multiple_deposit(self):
