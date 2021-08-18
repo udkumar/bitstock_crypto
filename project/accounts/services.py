@@ -32,9 +32,12 @@ def perform_withdrawal(user, amount):
                 transaction_type=Transaction.TRANSACTION_TYPE_WITHDRAWAL
             )
             if transaction:
-                account.balance -= amount
-                account.updated_at = datetime.datetime.now
-                account.save()
+                if account.balance >= amount:
+                    account.balance -= amount
+                    account.updated_at = datetime.datetime.now
+                    account.save()
+                else:
+                    print("Insufficient balance")
 
             return transaction
     except:
