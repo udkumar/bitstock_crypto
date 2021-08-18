@@ -22,7 +22,20 @@ def perform_deposit(user, amount):
         print("Something went wrong with amount deposit")
 
 def perform_withdrawal(user, amount):
-    pass
+    amount = btc_to_satoshis(amount)
+    account = Account.objects.get(user=user)
+    if account:
+        transaction = Transaction.objects.create(
+            account=account,
+            amount=amount,
+            transaction_type=Transaction.TRANSACTION_TYPE_WITHDRAWAL
+        )
+        if transaction:
+            account.balance -= amount
+            account.updated_at = datetime.datetime.now
+            account.save()
+
+        return transaction
 
 def btc_to_satoshis(btc):
     satoshis = btc*100000000
