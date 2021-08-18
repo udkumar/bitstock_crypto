@@ -24,6 +24,10 @@ def perform_deposit(user, amount):
 def perform_withdrawal(user, amount):
     pass
 
-def btc_to_satoshis(amount):
-    amount = amount*100000000
-    return amount
+def btc_to_satoshis(btc):
+    satoshis = btc*100000000
+    return satoshis
+
+def satoshis_to_btc(satoshis):
+    btc = satoshis/100000000
+    return btc
