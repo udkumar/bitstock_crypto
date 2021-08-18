@@ -1,14 +1,16 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.timezone import now
 
 
 class Account(models.Model):
     """
     Client account to hold currency
     """
-
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='accounts')
-    balance = models.FloatField('balance', default=0)
+    # Saving balance into satoshis
+    balance = models.IntegerField('balance', default=0)
+    updated_on = models.DateTimeField(default=now)
 
 
 class Transaction(models.Model):
@@ -19,7 +21,7 @@ class Transaction(models.Model):
     TRANSACTION_TYPE_WITHDRAWAL = 2
 
     transaction_type = models.PositiveIntegerField(
-        'transaction type',
+        'transaction_type',
         choices=(
             (TRANSACTION_TYPE_DEPOSIT, 'deposit'),
             (TRANSACTION_TYPE_WITHDRAWAL, 'withdrawal'),
@@ -27,3 +29,8 @@ class Transaction(models.Model):
     )
 
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions')
+
+    # removed FloatField because when there's enough rounding involved it may not matter, but for money we really can't have rounding errors
+    # Saving txn amount into satoshis
+    amount = models.IntegerField('amount', default=0)
+    created_on = models.DateTimeField(default=now, editable=False)
