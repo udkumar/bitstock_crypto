@@ -21,18 +21,31 @@ There is already a basic deposit service written, allowing for an amount to be a
 ### Task 1
 
 The Transaction model is fairly basic, and some important information is missing.  Make sure that whenever a Transaction is created, we store the time it was created.
+* I have added create_at which store txn date time
+* amount column I have added to txn record for each txn either deposit or withdrawal
 
 ### Task 2
 
 The accounts app has a tests.py, which has 2 tests, one of which fails.
 
 Why does the test fail?
+
+* This issue with In most programming languages.
+* https://en.wikipedia.org/wiki/Double-precision_floating-point_format
+
 How can you change the application to fix the test?
+
+* Updated balance to type FloatField because when there's enough rounding involved it may not matter, but for money we really can't have rounding errors.
+* Saving txn amount into satoshis and while fetching converting into btc
 
 ### Task 3
 
 The deposit service is quite basic right now, and not much could go wrong.  But what risks are there with the way it's written? Imagine that it's possible for the creation of the Transaction to fail, what would happen in this case? What could you do to improve it?
 
+* Added check for account and txn then if txn getting pass then only updating amount
+
 ### Task 4
 
 The perform_withdrawal service is unwritten.  Implement a basic version of this service - no extra models should be required.  What considerations might you need to make for this service, and how might you approach preventing any issues it might raise?
+
+* Added the perform_withdrawal and their test case also
